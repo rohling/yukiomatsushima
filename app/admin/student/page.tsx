@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { sql } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
 
@@ -10,10 +11,16 @@ export default async function ListStudent() {
         await sql`DELETE from student where id=${id}`
         revalidatePath("/admin/student")
     }
-    const { rows } = await sql`SELECT * from student`;
+    const { rows } = await sql`SELECT * from studente`;
     return (
         <div>
-	@@ -16,7 +23,15 @@ export default async function ListStudent() {
+            <h1 className="text-center ">Lista de aluno</h1>
+
+            <table>
+                <thead>
+                    <tr> <td>Nome do aluno</td> <td>Email</td></tr>
+                </thead>
+                <tbody>
                     {
                         rows.map((student) => {
                             return (
@@ -21,11 +28,19 @@ export default async function ListStudent() {
                                 <td>
                                     <form >
                                      <input type="text" hidden name="id" value={student.id}/>   
-                                    <button formAction={deleteStudent}>Excluir</button>
+                                    <Button variant= "destructive"
+                                     formAction={deleteStudent}>Excluir</Button>
                                     </form>
-
+                                
                                 </td> 
                                 </tr>
                             )
                         })
                     }
+                </tbody>
+            </table>
+
+
+        </div>
+    )
+}
